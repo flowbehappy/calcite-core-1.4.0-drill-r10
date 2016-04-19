@@ -24,6 +24,7 @@ import org.apache.calcite.rel.RelNode;
 import org.apache.calcite.rel.logical.LogicalTableScan;
 import org.apache.calcite.rel.type.RelDataType;
 import org.apache.calcite.rel.type.RelDataTypeField;
+import org.apache.calcite.sql.SqlNode;
 import org.apache.calcite.util.ImmutableBitSet;
 
 import com.google.common.collect.ImmutableList;
@@ -41,6 +42,8 @@ public abstract class RelOptAbstractTable implements RelOptTable {
   protected final RelDataType rowType;
   protected final String name;
 
+  protected SqlNode filter;
+
   //~ Constructors -----------------------------------------------------------
 
   protected RelOptAbstractTable(
@@ -53,6 +56,17 @@ public abstract class RelOptAbstractTable implements RelOptTable {
   }
 
   //~ Methods ----------------------------------------------------------------
+
+
+  @Override
+  public void attachFilter(SqlNode filter) {
+    this.filter = filter;
+  }
+
+  @Override
+  public SqlNode getFilter() {
+    return filter;
+  }
 
   public String getName() {
     return name;

@@ -41,6 +41,7 @@ import org.apache.calcite.rel.core.Project;
 import org.apache.calcite.rel.core.RelFactories;
 import org.apache.calcite.rel.core.Sample;
 import org.apache.calcite.rel.core.Uncollect;
+import org.apache.calcite.rel.core.TableScan;
 import org.apache.calcite.rel.logical.LogicalAggregate;
 import org.apache.calcite.rel.logical.LogicalCorrelate;
 import org.apache.calcite.rel.logical.LogicalIntersect;
@@ -603,6 +604,7 @@ public class SqlToRelConverter {
     convertFrom(
         bb,
         select.getFrom());
+    setOriginalFilter(bb, select.getWhere());
     convertWhere(
         bb,
         select.getWhere());
@@ -637,6 +639,14 @@ public class SqlToRelConverter {
         select, bb, collation, orderExprList, select.getOffset(),
         select.getFetch());
     bb.setRoot(bb.root, true);
+  }
+
+  private void setOriginalFilter(Blackboard bb, SqlNode where){
+    assert bb.inputs.size() == 1;
+    if(bb.inputs.get(0) instanceof TableScan){
+      TableScan tableScan = (TableScan) bb.inputs.get(0);
+      tableScan.getTable().attachFilter(where);
+    }
   }
 
   /**

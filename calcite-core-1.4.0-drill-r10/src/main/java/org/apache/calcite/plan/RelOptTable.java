@@ -24,6 +24,7 @@ import org.apache.calcite.rel.metadata.RelMetadataQuery;
 import org.apache.calcite.rel.type.RelDataType;
 import org.apache.calcite.rel.type.RelDataTypeField;
 import org.apache.calcite.schema.SchemaPlus;
+import org.apache.calcite.sql.SqlNode;
 import org.apache.calcite.util.ImmutableBitSet;
 
 import java.util.List;
@@ -34,6 +35,10 @@ import java.util.List;
  */
 public interface RelOptTable {
   //~ Methods ----------------------------------------------------------------
+
+  void attachFilter(SqlNode filter);
+
+  SqlNode getFilter();
 
   /**
    * Obtains an identifier for this table. The identifier must be unique with

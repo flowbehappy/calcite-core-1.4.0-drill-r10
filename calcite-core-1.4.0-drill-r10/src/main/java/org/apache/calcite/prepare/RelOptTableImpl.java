@@ -45,6 +45,7 @@ import org.apache.calcite.schema.StreamableTable;
 import org.apache.calcite.schema.Table;
 import org.apache.calcite.schema.TranslatableTable;
 import org.apache.calcite.sql.SqlAccessType;
+import org.apache.calcite.sql.SqlNode;
 import org.apache.calcite.sql.validate.SqlModality;
 import org.apache.calcite.sql.validate.SqlMonotonicity;
 import org.apache.calcite.util.ImmutableBitSet;
@@ -69,6 +70,18 @@ public class RelOptTableImpl implements Prepare.PreparingTable {
   private final Table table;
   private final Function<Class, Expression> expressionFunction;
   private final ImmutableList<String> names;
+
+  private SqlNode filter;
+
+  @Override
+  public void attachFilter(SqlNode filter) {
+    this.filter = filter;
+  }
+
+  @Override
+  public SqlNode getFilter() {
+    return filter;
+  }
 
   /** Estimate for the row count, or null.
    *
